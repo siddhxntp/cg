@@ -1,0 +1,114 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<GL/glut.h>
+
+
+int r;
+int xc,yc;
+int Rnd(int a)
+{
+    return(int)(a+0.5);
+}
+
+void ddaline(int xa, int ya,int xb,int yb)
+{
+    int dx,dy,steps;
+    dx=xb-xa;
+    dy=yb-ya;
+
+    if(abs(dx)>abs(dy))
+    {
+        steps=abs(dx);
+    }
+    else
+    {
+        steps=abs(dy);
+    }
+float xinc,yinc;
+xinc=dx/(float)(steps);
+yinc=dy/(float)(steps);
+
+float x,y;
+    x=xa;
+    y=ya;
+    glVertex2d(Rnd(x),Rnd(y));
+
+    for(int k=0;k<steps;k++)
+    {
+        x=x+xinc;
+        y=y+yinc;
+        glVertex2d(Rnd(x),Rnd(y));
+    }
+
+}
+void bresscircle(int xc,int yc,int r)
+{
+    int x,y,d;
+    x=0;
+    y=r;
+    d=3-(2*r);
+
+    do{
+        glVertex2d(x+xc,y+yc);
+         glVertex2d(x+xc,-y+yc);
+          glVertex2d(y+xc,x+yc);
+           glVertex2d(y+xc,-x+yc);
+            glVertex2d(-x+xc,y+yc);
+             glVertex2d(-x+xc,-y+yc);
+              glVertex2d(-y+xc,x+yc);
+               glVertex2d(-y+xc,-x+yc);
+
+    if(d<0)
+    {
+        x=x+1;
+        d=d+(4*x)+6;
+    }
+    else
+    {
+        x=x+1;
+        y=y-1;
+        d=d+(4*x)-(4*y)+10;
+    }
+    }
+    while(y>=x);
+}
+
+void Draw()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBegin(GL_POINTS);
+
+    ddaline(100,300,300,300);
+    ddaline(0,450,0,500);
+
+    bresscircle(xc,yc,r);
+
+
+    glEnd();
+    glFlush();
+}
+int main(int argc, char** argv)
+{
+    printf("Enter the x coordinate:");
+    scanf("%d",&xc);
+    printf("Enter the y coordinate:");
+    scanf("%d",&yc);
+    printf("Enter the radius of circle:");
+    scanf("%d",&r);
+   glutInit(&argc, argv);
+   glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
+   glutInitWindowSize(640,480);
+   glutInitWindowPosition(0,0);
+   glutCreateWindow("pixel");
+
+   glClearColor(1,1,1,0);
+   glColor3f(1,0,0);
+
+   gluOrtho2D(0,640,0,480);
+
+   glutDisplayFunc(Draw);
+
+   glutMainLoop();
+
+   return 0;
+}
